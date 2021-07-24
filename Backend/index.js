@@ -4,12 +4,18 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const User = require('./models/user')
+const User = require('./models/user');
+const Post = require('./models/post')
+const seedDb = require('./seed')
+const bodyParser = require('body-parser')
+const urlencoded = require('urlencode')
+const cloudinary = require('cloudinary');
+const multer = require('multer')
 
 
 
 dotenv.config();
-
+// seedDb();
 
 mongoose.connect('mongodb://localhost:27017/socialMediaApp',
     {
@@ -31,15 +37,20 @@ mongoose.connect('mongodb://localhost:27017/socialMediaApp',
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
+app.use(express.urlencoded({extended:true}))
+
+
 
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/post');
     
 
 
 // Routes
 app.use(userRoutes);
-app.use(authRoutes)
+app.use(authRoutes);
+app.use(postRoutes);
 
 
 
